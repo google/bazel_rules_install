@@ -1,0 +1,4 @@
+#!/bin/bash
+# Copyright 2018 The Bazel Authors.
+# SPDX-License-Identifier: Apache-2.0
+echo "Hello, world!"

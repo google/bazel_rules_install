@@ -1,0 +1,123 @@
+#!/bin/bash
+# Copyright 2018 The Bazel Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Installs files built by bazel.
+#
+@@GENERATED_WARNING@@ ; exit 1
+#
+# 1.  To use this template, add installer() rule from install/installer.bzl
+#     to your BUILD file.
+# 2.  To install the target under /usr/local/bin, run:
+#     bazel run //path/to/your:installer_target -c opt /usr/local/bin
+#
+#     If you don't want --compilation_mode=opt, run:
+#     bazel run //path/to/your:installer_target -- -g /usr/local/bin
+
+set -o pipefail -o errexit -o nounset
+
+# Template variables:
+# Array of paths of files
+declare -r -a SOURCE_FILES=@@SOURCE_FILES@@
+# Array of paths relative to prefix.
+declare -r -a TARGET_NAMES=@@TARGET_NAMES@@
+# Value for the -c or --compilation_mode bazel var.
+declare -r COMPILATION_MODE=@@COMPILATION_MODE@@
+# Fully specified bazel label of INSTALLER_LABEL installer() rule.
+declare -r INSTALLER_LABEL=@@INSTALLER_LABEL@@
+
+# Number of files.
+declare -r -i N_FILES="${#SOURCE_FILES[@]}"
+
+function error() {
+  echo >&2 "ERROR: $@"
+  usage
+  exit 1
+}
+
+function usage() {
+  echo >&2 "Usage: bazel run ${INSTALLER_LABEL} [-c opt] [--] [-g] [--] /INSTALL_PREFIX"
+}
+
+# Checks that all template variables have been substituted.
+function verify_templates() {
+  if [[ "${SOURCE_FILES[@]:0:2}" =~ ^@@ ]] ||
+    [[ "${TARGET_NAMES[@]:0:2}" =~ ^@@ ]] ||
+    [[ "${COMPILATION_MODE:0:2}" =~ ^@@ ]] ||
+    [[ "${INSTALLER_LABEL:0:2}" =~ ^@@ ]]; then
+    error "template substitution failed"
+  fi
+
+  if [[ "${#SOURCE_FILES[@]}" != "${#TARGET_NAMES[@]}" ]]; then
+    error "the number of source files is different thant the number target names"
+  fi
+}
+
+# Checks that each path in $SOURCE_FILES[@] is a readable file.
+function check_sources() {
+  for source in "${SOURCE_FILES[@]}"; do
+    if ! [[ -r "${source}" ]]; then
+      error "Can't read '${source}'"
+    fi
+  done
+}
+
+# Installs $i-th file in $prefix.
+function install_file() {
+  local prefix="$1"
+  local i="$2"
+  local source="${SOURCE_FILES[${i}]}"
+  local target="${TARGET_NAMES[${i}]}"
+  local target_dir
+  target_dir="$(dirname -- "${prefix}/${target}")"
+  local target_name
+  target_name="$(basename -- "${target}")"
+
+  [[ -d "${target_dir}" ]] ||
+    mkdir -p -- "${target_dir}"
+  cp -p -L -T -- "${source}" "${target_dir}/${target_name}"
+}
+
+function main() {
+  verify_templates
+
+  local g_flag=''
+  while getopts ':gh' flag; do
+    case "${flag}" in
+      g) g_flag='true' ;;  # Accept debug builds
+      h) usage; exit 0 ;;
+      *) error "Unexpected option '-${OPTARG}'"   ;;
+    esac
+  done
+
+  if [[ "${g_flag}" != 'true' ]] && [[ "${COMPILATION_MODE}" != 'opt' ]]; then
+    error "run bazel with '-c opt' or add '-- -g' option to run installer ${g_flag}"
+  fi
+
+  if [[ -z "${OPTIND:-}" ]] || (($OPTIND > $#)); then
+    error "INSTALL_PREFIX wasn't specified"
+  fi
+  local prefix="${!OPTIND}"
+  if [[ "${prefix:0:1}" != "/" ]]; then
+    error "INSTALL_PREFIX must be an absolute path"
+  fi
+
+  check_sources
+  local i
+  for ((i=0; i<${N_FILES}; i++)); do
+    install_file "${prefix}" "${i}"
+  done
+}
+
+main "$@"
