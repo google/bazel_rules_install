@@ -16,6 +16,10 @@ This is not an officially supported Google product.
         remote = "https://github.com/bazelbuild/rules_install.git",
         tag = '0.0.1',
     )
+
+    load("@com_github_google_rules_install//:package.bzl", "install_rules_dependencies")
+
+    install_rules_dependencies()
     ```
 
 1.  In the BUILD file of the package where you want to add an installer add the following:
