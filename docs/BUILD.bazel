@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@io_bazel_skydoc//skylark:skylark.bzl", "skylark_doc")
+
 licenses(["notice"])  # Apache 2.0
 
 # To update docs, run:

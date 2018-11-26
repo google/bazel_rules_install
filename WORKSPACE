@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-workspace( name = "com_github_google_rules_install" )
+workspace(name = "com_github_google_rules_install")
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 

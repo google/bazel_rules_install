@@ -29,7 +29,7 @@ git_repository(
 
 git_repository(
     name = "io_bazel_skydoc",
-    commit = "77e5399258f6d91417d23634fce97d73b40cf337", # 2018-10-29
+    commit = "77e5399258f6d91417d23634fce97d73b40cf337",  # 2018-10-29
     remote = "https://github.com/bazelbuild/skydoc.git",
 )
 
