@@ -17,13 +17,13 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 def install_rules_dependencies():
-  """Fetches dependencies for @com_github_google_rules_install"""
-  _maybe(
-      git_repository,
-      name = "bazel_skylib",
-      remote = "https://github.com/bazelbuild/bazel-skylib.git",
-      commit = "6e2d7e4a75b8ec0c307cf2ff2ca3d837633413ca",  # 2018-09-28
-  )
+    """Fetches dependencies for @com_github_google_rules_install"""
+    _maybe(
+        git_repository,
+        name = "bazel_skylib",
+        remote = "https://github.com/bazelbuild/bazel-skylib.git",
+        commit = "6e2d7e4a75b8ec0c307cf2ff2ca3d837633413ca",  # 2018-09-28
+    )
 
 def _maybe(repo_rule, name, **kwargs):
     if name not in native.existing_rules():

@@ -71,7 +71,7 @@ _gen_installer = rule(
         "target_subdir": attr.string(default = ""),
         "_template": attr.label(
             allow_single_file = True,
-            default = Label(_TEMPLATE_TARGET)
+            default = Label(_TEMPLATE_TARGET),
         ),
     },
     executable = True,

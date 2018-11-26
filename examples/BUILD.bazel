@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@com_github_google_rules_install//:defs.bzl", "installer")
+
 licenses(["notice"])  # Apache 2.0
 
 installer(

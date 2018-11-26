@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@com_github_google_rules_install//:defs.bzl", "installer")
+
 licenses(["notice"])  # Apache 2.0
 
 installer(
@@ -54,7 +55,7 @@ sh_test(
 installer(
     name = "subdir_installer_under_test",
     data = ["testdata/data.txt"],
-    target_subdir = "docs"
+    target_subdir = "docs",
 )
 
 sh_test(
@@ -70,7 +71,6 @@ sh_test(
         ":subdir_installer_under_test",
     ],
 )
-
 
 installer(
     name = "multifile_installer_under_test",
