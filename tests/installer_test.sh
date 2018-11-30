@@ -15,17 +15,36 @@
 
 set -o pipefail -o errexit -o nounset
 
+function error() {
+  echo >&2 "installer_test.sh: $@"
+  exit 1
+}
+
 # installer rule outut
 declare -r INSTALLER="$1"
 # srcs attribute of installer rule
 declare -r FILE="$2"
-# target_subdir attribute of installer rule
-declare -r SUBDIR="${3:-}"
 
-function error() {
-  echo >&2 "$@"
-  exit 1
-}
+while (( "$#" >  2 )); do
+  case "$3" in
+    -subdir=*)
+      # target_subdir attribute of installer rule
+      declare -r SUBDIR="${3#-subdir=}"
+    ;;
+    -executable=*)
+      # target_subdir attribute of installer rule
+      declare -r EXECUTABLE="${3#-executable=}"
+    ;;
+    *)
+      error "unknown flag $3"
+    ;;
+  esac
+  shift
+done
+
+if [[ -z "${SUBDIR:-}" ]]; then
+  declare -r SUBDIR=""
+fi
 
 function setup() {
   [[ -r "${FILE}" ]] ||
@@ -33,6 +52,35 @@ function setup() {
   [[ -x "${INSTALLER}" ]] ||
     error "Can't run ${INSTALLER}"
   mktemp --directory --tmpdir="${TEST_TMPDIR}"
+}
+
+function verify_install() {
+  local expected_path="$1"
+  local source_path="$2"
+
+  if [[ ! -f "${expected_path}" ]]; then
+    error "expected file ${expected_path} doesn't exist"
+  fi
+
+  local mode
+  mode="$(stat --dereference --format=%a "${expected_path}")"
+  local expected_mode
+  if [[ "${EXECUTABLE}" = "True" ]]; then
+    expected_mode="755"
+  else
+    expected_mode="644"
+  fi
+
+  if [[ "${mode}" != "${expected_mode}" ]]; then
+    echo >&2 "mode of file ${expected_path} (${mode}) do not match ${expected_mode}"
+    return 1
+  fi
+
+  if ! diff -q "${source_path}" "${expected_path}"; then
+    echo >&2 "contents of file ${expected_path} do not match ${source_path}"
+    return 1
+  fi
+
 }
 
 function test_basic_install() {
@@ -50,25 +98,7 @@ function test_basic_install() {
     expected_path="${tmpdir}/$(basename "${FILE}")"
   fi
 
-  if [[ ! -f "${expected_path}" ]]; then
-    echo >&2 "expected file ${expected_path} doesn't exist"
-    return 1
-  fi
-
-  local mode
-  mode="$(stat --dereference --format=%a "${expected_path}")"
-  local expected_mode
-  expected_mode="$(stat --dereference --format=%a "${FILE}")"
-  if [[ "${mode}" != "${expected_mode}" ]]; then
-    echo >&2 "mode of file ${expected_path} (${expected_mode}) do not match ${FILE} (${mode})"
-    return 1
-  fi
-
-  if ! diff -q "${FILE}" "${expected_path}"; then
-    echo >&2 "contents of file ${expected_path} do not match ${FILE}"
-    return 1
-  fi
-
+  verify_install "${expected_path}" "${FILE}"
 }
 
 function test_prefix_install() {
@@ -86,25 +116,7 @@ function test_prefix_install() {
     expected_path="${tmpdir}/a/b/c/$(basename "${FILE}")"
   fi
 
-  if [[ ! -f "${expected_path}" ]]; then
-    echo >&2 "expected file ${expected_path} doesn't exist"
-    return 1
-  fi
-
-  local mode
-  mode="$(stat --dereference --format=%a "${expected_path}")"
-  local expected_mode
-  expected_mode="$(stat --dereference --format=%a "${FILE}")"
-  if [[ "${mode}" != "${expected_mode}" ]]; then
-    echo >&2 "mode of file ${expected_path} (${expected_mode}) do not match ${FILE} (${mode})"
-    return 1
-  fi
-
-  if ! diff -q "${FILE}" "${expected_path}"; then
-    echo >&2 "contents of file ${expected_path} do not match ${FILE}"
-    return 1
-  fi
-
+  verify_install "${expected_path}" "${FILE}"
 }
 
 function test_generated_warning() {

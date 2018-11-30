@@ -41,6 +41,7 @@ def _gen_install_binary_impl(ctx):
             "@@SOURCE_FILES@@": shell.array_literal(sources),
             "@@TARGET_NAMES@@": shell.array_literal(targets),
             "@@COMPILATION_MODE@@": shell.quote(ctx.var["COMPILATION_MODE"]),
+            "@@EXECUTABLE@@": shell.quote(repr(ctx.attr.executable)),
             "@@INSTALLER_LABEL@@": shell.quote("@{}//{}:{}".format(
                 ctx.workspace_name,
                 ctx.label.package,
@@ -68,6 +69,7 @@ _gen_installer = rule(
             mandatory = True,
             allow_files = True,
         ),
+        "executable": attr.bool(default = True),
         "target_subdir": attr.string(default = ""),
         "_template": attr.label(
             allow_single_file = True,
@@ -80,7 +82,7 @@ _gen_installer = rule(
     },
 )
 
-def installer(name, data, target_subdir = ""):
+def installer(name, data, executable = True, target_subdir = ""):
     """Creates an installer
 
     This rule creates an installer for targets in data. Running the installer
@@ -90,6 +92,7 @@ def installer(name, data, target_subdir = ""):
     Args:
       name: A unique name of this rule.
       data: Targets to be installed. File names will not be changed.
+      executable: If True (default), the copied files will be set as executable.
       target_subdir: Optional subdir under the prefix where the files will be
                      placed.
     """
@@ -97,6 +100,7 @@ def installer(name, data, target_subdir = ""):
     _gen_installer(
         name = installer_name,
         data = data,
+        executable = executable,
         target_subdir = target_subdir,
     )
 

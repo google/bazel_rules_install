@@ -19,6 +19,7 @@ licenses(["notice"])  # Apache 2.0
 installer(
     name = "installer_under_test",
     data = ["testdata/data.txt"],
+    executable = False,
 )
 
 sh_test(
@@ -27,6 +28,7 @@ sh_test(
     args = [
         "$(location :installer_under_test)",
         "$(location testdata/data.txt)",
+        "-executable=False",
     ],
     data = [
         "testdata/data.txt",
@@ -45,6 +47,7 @@ sh_test(
     args = [
         "$(location :executable_installer_under_test)",
         "$(location testdata/executable.exe)",
+        "-executable=True",
     ],
     data = [
         "testdata/executable.exe",
@@ -55,6 +58,7 @@ sh_test(
 installer(
     name = "subdir_installer_under_test",
     data = ["testdata/data.txt"],
+    executable = False,
     target_subdir = "docs",
 )
 
@@ -64,7 +68,8 @@ sh_test(
     args = [
         "$(location :subdir_installer_under_test)",
         "$(location testdata/data.txt)",
-        "docs",
+        "-subdir=docs",
+        "-executable=False",
     ],
     data = [
         "testdata/data.txt",
@@ -79,6 +84,7 @@ installer(
         "testdata/executable.exe",
         "testdata/subdir/subdir_data.txt",
     ],
+    executable = False,
 )
 
 # Test each result separately
@@ -88,6 +94,7 @@ sh_test(
     args = [
         "$(location :multifile_installer_under_test)",
         "$(location testdata/data.txt)",
+        "-executable=False",
     ],
     data = [
         "testdata/data.txt",
@@ -101,6 +108,8 @@ sh_test(
     args = [
         "$(location :multifile_installer_under_test)",
         "$(location testdata/executable.exe)",
+        # At the moment the multifile installer can't mix modes.
+        "-executable=False",
     ],
     data = [
         "testdata/executable.exe",
@@ -114,6 +123,7 @@ sh_test(
     args = [
         "$(location :multifile_installer_under_test)",
         "$(location testdata/subdir/subdir_data.txt)",
+        "-executable=False",
     ],
     data = [
         "testdata/subdir/subdir_data.txt",
