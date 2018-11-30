@@ -8,13 +8,13 @@ This is not an officially supported Google product.
 
 ## Setup
 
-1.  In the WORKSPACE file of your Bazel project add the following:
+1.  In the `WORKSPACE` file of your Bazel project add the following:
 
     ```python
     git_repository(
         name = "com_github_google_rules_install",
-        remote = "https://github.com/bazelbuild/rules_install.git",
-        tag = '0.0.1',
+        remote = "https://github.com/google/bazel_rules_install.git",
+        commit = "2e7d2a59b35b61547ea912ff7fd99218f293a35e",  # tag = '0.0.1',
     )
 
     load("@com_github_google_rules_install//:package.bzl", "install_rules_dependencies")
@@ -22,7 +22,7 @@ This is not an officially supported Google product.
     install_rules_dependencies()
     ```
 
-1.  In the BUILD file of the package where you want to add an installer add the following:
+1.  In the `BUILD` file of the package where you want to add an installer add the following:
 
     ````python
     # In file src/path/to/pkg/BUILD:
@@ -35,10 +35,10 @@ This is not an officially supported Google product.
     )
     ````
 
-1.  Run the installer using `bazel run`. This example installs `foo` in `~/bin`:
+1.  Run the installer using `bazel run -c opt`. This example installs `foo` in `~/bin`:
 
     ```shell
-    bazel run //src/path/to/pkg:install_foo -c opt ~/bin
+    bazel run -c opt //src/path/to/pkg:install_foo ~/bin
     ```
 
 ## See also
