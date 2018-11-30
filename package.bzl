@@ -22,7 +22,7 @@ def install_rules_dependencies():
         git_repository,
         name = "bazel_skylib",
         remote = "https://github.com/bazelbuild/bazel-skylib.git",
-        commit = "6e2d7e4a75b8ec0c307cf2ff2ca3d837633413ca",  # 2018-09-28
+        commit = "f83cb8dd6f5658bc574ccd873e25197055265d1c",  # tag = "0.6.0",
     )
 
 def _maybe(repo_rule, name, **kwargs):
