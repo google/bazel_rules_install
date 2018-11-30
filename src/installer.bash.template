@@ -34,14 +34,15 @@ declare -r -a SOURCE_FILES=@@SOURCE_FILES@@
 declare -r -a TARGET_NAMES=@@TARGET_NAMES@@
 # Value for the -c or --compilation_mode bazel var.
 declare -r COMPILATION_MODE=@@COMPILATION_MODE@@
+# Set executable mode of files
+declare -r EXECUTABLE=@@EXECUTABLE@@
 # Fully specified bazel label of INSTALLER_LABEL installer() rule.
 declare -r INSTALLER_LABEL=@@INSTALLER_LABEL@@
-
 # Number of files.
 declare -r -i N_FILES="${#SOURCE_FILES[@]}"
 
 function error() {
-  echo >&2 "ERROR: $@"
+  echo >&2 "installer.bash ERROR: $@"
   usage
   exit 1
 }
@@ -83,10 +84,18 @@ function install_file() {
   target_dir="$(dirname -- "${prefix}/${target}")"
   local target_name
   target_name="$(basename -- "${target}")"
+  local target_mode
+  if [[ "${EXECUTABLE}" = "True" ]]; then
+    target_mode=755
+  else
+    target_mode=644
+  fi
 
-  [[ -d "${target_dir}" ]] ||
-    mkdir -p -- "${target_dir}"
-  cp -p -L -T -- "${source}" "${target_dir}/${target_name}"
+  [[ -d "${target_dir}" ]] || \
+    mkdir --parents -- "${target_dir}"
+
+  install --mode="${target_mode}" \
+    -T -- "${source}" "${target_dir}/${target_name}"
 }
 
 function main() {
