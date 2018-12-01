@@ -20,5 +20,5 @@ licenses(["notice"])  # Apache 2.0
 # bazel build //:install-docs && unzip bazel-bin/install-docs-skydoc.zip -x index.md
 skylark_doc(
     name = "install-docs",
-    srcs = ["@com_github_google_rules_install//src:install-rules"],
+    srcs = ["@com_github_google_rules_install//installer"],
 )

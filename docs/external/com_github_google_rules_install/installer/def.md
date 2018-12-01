@@ -23,7 +23,7 @@ Skylark rules for installing files using Bazel.
 ## installer
 
 <pre>
-installer(<a href="#installer.name">name</a>, <a href="#installer.data">data</a>, <a href="#installer.target_subdir">target_subdir</a>)
+installer(<a href="#installer.name">name</a>, <a href="#installer.data">data</a>, <a href="#installer.executable">executable</a>, <a href="#installer.target_subdir">target_subdir</a>)
 </pre>
 
 Creates an installer
@@ -55,6 +55,13 @@ argument to the installer.
       <td>
         <p><code>Unknown; Required</code></p>
         <p>Targets to be installed. File names will not be changed.</p>
+      </td>
+    </tr>
+    <tr id="installer.executable">
+      <td><code>executable</code></td>
+      <td>
+        <p><code>Boolean; Optional; Default is True</code></p>
+        <p>If True (default), the copied files will be set as executable.</p>
       </td>
     </tr>
     <tr id="installer.target_subdir">

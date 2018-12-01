@@ -39,7 +39,7 @@ git_repository(
     remote = "https://github.com/bazelbuild/buildtools.git",
 )
 
-load("@com_github_google_rules_install//:package.bzl", "install_rules_dependencies")
+load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies")
 
 install_rules_dependencies()
 
