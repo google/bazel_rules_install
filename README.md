@@ -14,10 +14,10 @@ This is not an officially supported Google product.
     git_repository(
         name = "com_github_google_rules_install",
         remote = "https://github.com/google/bazel_rules_install.git",
-        commit = "2e7d2a59b35b61547ea912ff7fd99218f293a35e",  # tag = '0.0.1',
+        commit = "{COMMIT_ID}",
     )
 
-    load("@com_github_google_rules_install//:package.bzl", "install_rules_dependencies")
+    load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies")
 
     install_rules_dependencies()
     ```
@@ -27,7 +27,7 @@ This is not an officially supported Google product.
     ````python
     # In file src/path/to/pkg/BUILD:
 
-    load("@com_github_google_rules_install//:defs.bzl", "installer")
+    load("@com_github_google_rules_install//installer:def.bzl", "installer")
 
     installer(
         name = "install_foo",
