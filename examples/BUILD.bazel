@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@com_github_google_rules_install//:defs.bzl", "installer")
+load("@com_github_google_rules_install//installer:def.bzl", "installer")
 
 licenses(["notice"])  # Apache 2.0
 

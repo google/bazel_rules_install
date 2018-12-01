@@ -21,7 +21,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:shell.bzl", "shell")
 
 _INSTALLER_GEN_SUFFIX = "_gen"
-_TEMPLATE_TARGET = "@com_github_google_rules_install//src:installer_template"
+_TEMPLATE_TARGET = "@com_github_google_rules_install//installer:installer_template"
 
 def _gen_install_binary_impl(ctx):
     files = []

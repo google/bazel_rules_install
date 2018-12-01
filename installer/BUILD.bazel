@@ -12,8 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Public API is re-exported here."""
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
-load("@com_github_google_rules_install//src:installer.bzl", _installer = "installer")
+licenses(["notice"])  # Apache 2.0
 
-installer = _installer
+exports_files(
+    ["def.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "installer_template",
+    srcs = ["installer.bash.template"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "installer",
+    srcs = [
+        "def.bzl",
+    ],
+    visibility = ["//visibility:public"],
+)
