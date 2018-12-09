@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eux
+set -eu
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   OS=darwin
@@ -66,7 +66,7 @@ function install_bazel() {
     chmod +x "${HOME}/bin/bazel"
   else
     wget -O install.sh \
-      "https://github.com/bazelbuild/bazel/releases/download/${VERSION}/bazel-${VERSION}-without-jdk-installer-${OS}-x86_64.sh"
+      "https://github.com/bazelbuild/bazel/releases/download/${VERSION}/bazel-${VERSION}-installer-${OS}-x86_64.sh"
     chmod +x install.sh
     ./install.sh --user
     rm -f install.sh
