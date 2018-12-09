@@ -22,7 +22,7 @@ else
   OS=linux
 fi
 
-# -------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Helper to use the github redirect to find the latest release.
 function github_latest_release_tag() {
   local PROJECT="$1"
@@ -34,7 +34,7 @@ function github_latest_release_tag() {
   | sed -e 's,https://.*/releases/tag/\(.*\),\1,'
 }
 
-# -------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Helper to get a download url out of bazel build metadata file.
 function url_from_bazel_manifest() {
   local MANIFEST_URL="$1"
@@ -47,7 +47,7 @@ function url_from_bazel_manifest() {
     | python -c "import json; import sys; print json.load(sys.stdin)['platforms']['${JSON_OS}']['url']"
 }
 
-# -------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Helper to install bazel.
 function install_bazel() {
   local VERSION="$1"
@@ -72,7 +72,7 @@ function install_bazel() {
   bazel version
 }
 
-# -------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Helper to install buildifier.
 function install_buildifier() {
   local VERSION="$1"
@@ -98,7 +98,7 @@ function install_buildifier() {
   buildifier --version
 }
 
-# -------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Install what is requested.
 if [[ -z "${INSTALL_BAZEL:-}" ]]; then
   echo "No bazel version requested"
