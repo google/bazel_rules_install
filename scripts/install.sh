@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eu
+set -o errexit -o nounset -o xtrace
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   OS=darwin
@@ -56,10 +56,7 @@ function install_bazel() {
     VERSION="$(github_latest_release_tag bazelbuild/bazel)"
   fi
 
-  # macOS and trusty images have jdk8, so install bazel without jdk.
   if [[ "${VERSION}" == "HEAD" ]]; then
-    # bazelbuild/continuous-integration/issues/234 - they don't seem to have an installed
-    # just raw binaries?
     mkdir -p "${HOME}/bin"
     wget -O "${HOME}/bin/bazel" \
       "$(url_from_bazel_manifest https://storage.googleapis.com/bazel-builds/metadata/latest.json)"
@@ -103,5 +100,14 @@ function install_buildifier() {
 
 # -------------------------------------------------------------------------------------------------
 # Install what is requested.
-[[ -z "${INSTALL_BAZEL:-}" ]] || install_bazel "${INSTALL_BAZEL}"
-[[ -z "${INSTALL_BUILDIFER:-}" ]] || install_buildifier "${INSTALL_BUILDIFER}"
+if [[ -z "${INSTALL_BAZEL:-}" ]]; then
+  echo "No bazel version requested"
+else
+ install_bazel "${INSTALL_BAZEL}"
+fi
+
+if [[ -z "${INSTALL_BUILDIFER:-}" ]]; then
+  echo "No buildifier version requested"
+else
+  install_buildifier "${INSTALL_BUILDIFER}"
+fi
