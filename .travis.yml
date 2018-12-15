@@ -1,0 +1,18 @@
+language: minimal
+
+git:
+  depth: 1
+
+install: scripts/install.sh
+script: scripts/run_tests.sh
+
+matrix:
+  include:
+    - os: linux
+      env:
+        - INSTALL_BAZEL=HEAD
+        - RUN_TESTS=1
+    - os: linux
+      env:
+        - INSTALL_BAZEL=RELEASE
+        - RUN_TESTS=1
