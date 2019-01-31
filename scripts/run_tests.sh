@@ -19,7 +19,7 @@ set -o errexit -o nounset -o xtrace
 # -----------------------------------------------------------------------------
 # Asked to do a bazel build.
 if [[ -z "${RUN_TESTS:-}" ]]; then
-  echo "Skipping tests"
+  echo >&2 "Skipping tests"
 else
   bazel test --show_progress_rate_limit=30.0 //...
 fi

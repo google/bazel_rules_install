@@ -16,9 +16,11 @@
 
 set -eu
 
-# -------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 # Asked to do a docs build.
-if [[ -n "${REGEN_DOCS:-}" ]]; then
+if [[ -z "${REGEN_DOCS:-}" ]]; then
+  echo >&2 "Skipping docs regen"
+else
   if ! diff -u <(git status --porcelain=v2) /dev/null; then
     echo >&2 "Repository is not in a clean state"
     exit 1
@@ -28,5 +30,6 @@ if [[ -n "${REGEN_DOCS:-}" ]]; then
 
   if ! diff -u <(git status --porcelain=v2) /dev/null; then
     echo >&2 "The documentation is out of date. Run ./docs/regen.sh"
+    exit 1
   fi
 fi
