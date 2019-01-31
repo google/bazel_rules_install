@@ -14,7 +14,7 @@ This is not an officially supported Google product.
     git_repository(
         name = "com_github_google_rules_install",
         remote = "https://github.com/google/bazel_rules_install.git",
-        tag = '0.0.2',
+        tag = "0.0.2",
     )
 
     load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies")
