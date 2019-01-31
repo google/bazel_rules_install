@@ -18,7 +18,7 @@ set -eu
 
 # -------------------------------------------------------------------------
 # Asked to do a docs build.
-if [[ -z "${REGEN_DOCS:-}" ]]; then
+if [[ -z "${RUN_REGEN_DOCS:-}" ]]; then
   echo >&2 "Skipping docs regen"
 else
   if ! diff -u <(git status --porcelain=v2) /dev/null; then
