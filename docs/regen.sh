@@ -17,6 +17,6 @@
 set -eu
 
 cd "$(dirname "$0")"
-bazel build //:install-docs
+bazel build --show_progress_rate_limit=30.0 //:install-docs
 rm -r ./external/
 unzip bazel-bin/install-docs-skydoc.zip -x index.md
