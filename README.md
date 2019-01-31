@@ -13,7 +13,7 @@ This is not an officially supported Google product.
     ```python
     git_repository(
         name = "com_github_google_rules_install",
-        remote = "https://github.com/bazelbuild/rules_install.git",
+        remote = "https://github.com/google/bazel_rules_install.git",
         tag = '0.0.2',
     )
 
