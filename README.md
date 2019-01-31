@@ -2,6 +2,25 @@
 
 This is not an officially supported Google product.
 
+## Overview
+
+This project aims at making it easy to install Bazel projects on local workstations.
+Think: `make install`. Someday: `bazel run install`.
+
+### Features
+
+- [ ] `installer` rule:
+    - [x] Installs given file(s) in a directory.
+    - [ ] Installs a directory tree.
+    - [x] Prevents accidental instalation of debug builds (disabled with a `-g` flag).
+    - [ ] Renames installed files.
+    - [ ] Selects a sensible default install prefix.
+    - [ ] When needed asks for write access (`sudo`).
+- [ ] OS support:
+    - [x] Linux
+    - [ ] macOS
+    - [ ] Windows
+
 ## Rules
 
 * [installer](docs/external/com_github_google_rules_install/src/installer.md#installer)
