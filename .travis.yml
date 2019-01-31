@@ -5,6 +5,7 @@ git:
 
 install: scripts/install.sh
 script: scripts/run_tests.sh
+script: scripts/run_regen_docs.sh
 
 matrix:
   include:
