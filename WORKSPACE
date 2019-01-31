@@ -29,13 +29,13 @@ local_repository(
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "f87fa87475ea107b3c69196f39c82b7bbf58fe27c62a338684c20ca17d1d8613",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.16.2/rules_go-0.16.2.tar.gz",
+    sha256 = "492c3ac68ed9dcf527a07e6a1b2dcbf199c6bf8b35517951467ac32e421c06c1",
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.17.0/rules_go-0.17.0.tar.gz"],
 )
 
 git_repository(
     name = "com_github_bazelbuild_buildtools",
-    commit = "3f6a2256863cb60d56b63b883dc797225b888e15",  # tag = "0.19.2.1",
+    commit = "6b4248f0c43c82a6f7c7ff109366e6a38c6ea811",  # 2019-01-30
     remote = "https://github.com/bazelbuild/buildtools.git",
 )
 
@@ -43,7 +43,7 @@ load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies"
 
 install_rules_dependencies()
 
-load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
 
