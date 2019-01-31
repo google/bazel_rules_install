@@ -15,29 +15,30 @@
 workspace(name = "com_github_google_rules_install_examples")
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 local_repository(
     name = "com_github_google_rules_install",
     path = "..",
 )
 
-git_repository(
+http_archive(
     name = "io_bazel_rules_go",
-    remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.16.1",
+    sha256 = "492c3ac68ed9dcf527a07e6a1b2dcbf199c6bf8b35517951467ac32e421c06c1",
+    urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.17.0/rules_go-0.17.0.tar.gz"],
 )
 
 git_repository(
     name = "com_github_bazelbuild_buildtools",
+    commit = "6b4248f0c43c82a6f7c7ff109366e6a38c6ea811",  # 2019-01-30
     remote = "https://github.com/bazelbuild/buildtools.git",
-    tag = "0.17.2",
 )
 
 load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies")
 
 install_rules_dependencies()
 
-load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 go_rules_dependencies()
 

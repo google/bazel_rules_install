@@ -7,6 +7,7 @@ install: scripts/install.sh
 script:
   - scripts/run_tests.sh
   - scripts/run_regen_docs.sh
+  - scripts/run_buildifier.sh
 
 matrix:
   include:
@@ -19,3 +20,4 @@ matrix:
         - INSTALL_BAZEL=RELEASE
         - RUN_TESTS=1
         - RUN_REGEN_DOCS=1
+        - RUN_BUILDIFIER=1
