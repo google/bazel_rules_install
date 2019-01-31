@@ -16,3 +16,4 @@ matrix:
       env:
         - INSTALL_BAZEL=RELEASE
         - RUN_TESTS=1
+        - REGEN_DOCS=1
