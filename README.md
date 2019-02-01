@@ -46,7 +46,7 @@ Think: `make install`. Someday: `bazel run install`.
     ````python
     # In file src/path/to/pkg/BUILD:
 
-    load("@com_github_google_rules_install//:defs.bzl", "installer")
+    load("@com_github_google_rules_install//installer:def.bzl", "installer")
 
     installer(
         name = "install_foo",
