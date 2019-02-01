@@ -14,12 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -o errexit -o nounset -o xtrace
+set -eu
 
-# -----------------------------------------------------------------------------
-# Asked to do a bazel build.
-if [[ -z "${RUN_TESTS:-}" ]]; then
-  echo >&2 "Skipping tests"
-else
-  bazel test --show_progress_rate_limit=30.0 //...
-fi
+cd "$(dirname "$0")"
+bazel build --show_progress_rate_limit=30.0 //:install-docs
+rm -r ./external/
+unzip bazel-bin/install-docs-skydoc.zip -x index.md

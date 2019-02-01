@@ -14,12 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -o errexit -o nounset -o xtrace
+set -eu
 
-# -----------------------------------------------------------------------------
-# Asked to do a bazel build.
-if [[ -z "${RUN_TESTS:-}" ]]; then
-  echo >&2 "Skipping tests"
+# -------------------------------------------------------------------------
+# Asked to do a docs build.
+if [[ -z "${RUN_REGEN_DOCS:-}" ]]; then
+  echo >&2 "Skipping docs regen"
 else
-  bazel test --show_progress_rate_limit=30.0 //...
+  if ! diff -u <(git status --porcelain=v2) /dev/null; then
+    echo >&2 "Repository is not in a clean state"
+    exit 1
+  fi
+
+  ./docs/regen.sh
+
+  if ! diff -u <(git status --porcelain=v2) /dev/null; then
+    echo >&2 "The documentation is out of date. Run ./docs/regen.sh"
+    exit 1
+  fi
 fi

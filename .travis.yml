@@ -4,7 +4,9 @@ git:
   depth: 1
 
 install: scripts/install.sh
-script: scripts/run_tests.sh
+script:
+  - scripts/run_tests.sh
+  - scripts/run_regen_docs.sh
 
 matrix:
   include:
@@ -16,3 +18,4 @@ matrix:
       env:
         - INSTALL_BAZEL=RELEASE
         - RUN_TESTS=1
+        - RUN_REGEN_DOCS=1
