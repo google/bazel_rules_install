@@ -14,8 +14,10 @@ matrix:
       env:
         - INSTALL_BAZEL=HEAD
         - RUN_TESTS=1
+        - RUN_EXAMPLES=1
     - os: linux
       env:
         - INSTALL_BAZEL=RELEASE
         - RUN_TESTS=1
+        - RUN_EXAMPLES=1
         - RUN_REGEN_DOCS=1
