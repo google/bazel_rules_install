@@ -24,6 +24,9 @@
 #
 #     If you don't want --compilation_mode=opt, run:
 #     bazel run //path/to/your:installer_target -- -g /usr/local/bin
+#
+#     To use sudo, run:
+#     bazel run //path/to/your:installer_target -- -s /usr/local/bin
 
 set -o pipefail -o errexit -o nounset
 
@@ -48,7 +51,7 @@ function error() {
 }
 
 function usage() {
-  echo >&2 "Usage: bazel run ${INSTALLER_LABEL} [-c opt] [--] [-g] [--] /INSTALL_PREFIX"
+  echo >&2 "Usage: bazel run ${INSTALLER_LABEL} [-c opt] [--] [-g] [-s] [--] /INSTALL_PREFIX"
 }
 
 # Checks that all template variables have been substituted.
@@ -78,6 +81,7 @@ function check_sources() {
 function install_file() {
   local prefix="$1"
   local i="$2"
+  local sudo="$3"
   local source="${SOURCE_FILES[${i}]}"
   local target="${TARGET_NAMES[${i}]}"
   local target_dir
@@ -92,9 +96,9 @@ function install_file() {
   fi
 
   [[ -d "${target_dir}" ]] || \
-    mkdir --parents -- "${target_dir}"
+    $sudo mkdir --parents -- "${target_dir}"
 
-  install --mode="${target_mode}" \
+  $sudo install --mode="${target_mode}" \
     -T -- "${source}" "${target_dir}/${target_name}"
 }
 
@@ -102,9 +106,11 @@ function main() {
   verify_templates
 
   local g_flag=''
-  while getopts ':gh' flag; do
+  local s_flag=''
+  while getopts ':ghs' flag; do
     case "${flag}" in
       g) g_flag='true' ;;  # Accept debug builds
+      s) s_flag='sudo' ;;  # Run with sudo
       h) usage; exit 0 ;;
       *) error "Unexpected option '-${OPTARG}'"   ;;
     esac
@@ -125,7 +131,7 @@ function main() {
   check_sources
   local i
   for ((i=0; i<${N_FILES}; i++)); do
-    install_file "${prefix}" "${i}"
+    install_file "${prefix}" "${i}" "${s_flag}"
   done
 }
 
