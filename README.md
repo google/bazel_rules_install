@@ -60,6 +60,15 @@ Think: `make install`. Someday: `bazel run install`.
     bazel run //src/path/to/pkg:install_foo -c opt ~/bin
     ```
 
+    If you need to use `sudo` to install a file in a system directory:
+
+    * **Do not** run `sudo bazel`.
+    * Instead flag `-s` to the installer.
+
+    ```shell
+    bazel run //src/path/to/pkg:install_foo -c opt -- -s /usr/local/bin
+    ```
+
 ## See also
 
 * [Examples](examples/README.md)
