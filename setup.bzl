@@ -1,4 +1,4 @@
-# Copyright 2018 The Bazel Authors.
+# Copyright 2020 The Bazel Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
-licenses(["notice"])  # Apache 2.0
-
-exports_files([
-    "LICENSE",
-    "deps.bzl",
-    "setup.bzl",
-])
-
-buildifier(
-    name = "buildifier",
-)
+def install_rules_setup():
+    """Sets up workspace for @com_github_google_rules_install"""
+    bazel_skylib_workspace()
