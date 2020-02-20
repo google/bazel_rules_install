@@ -26,7 +26,7 @@ else
     exit 1
   fi
 
-  if ! bazel run :buildifier -- --mode=check; then
+  if ! bazel run  --show_progress_rate_limit=30.0 :buildifier -- --mode=check; then
     echo >&2 "Run `bazel run :buildifier`"
     exit 1
   fi
