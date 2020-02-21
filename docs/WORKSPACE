@@ -23,8 +23,9 @@ local_repository(
 
 git_repository(
     name = "io_bazel_stardoc",
+    commit = "4378e9b6bb2831de7143580594782f538f461180",  # 0.4.0
     remote = "https://github.com/bazelbuild/stardoc.git",
-    commit = "4378e9b6bb2831de7143580594782f538f461180", # 0.4.0
+    shallow_since = "1570829166 -0400",
 )
 
 load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies")

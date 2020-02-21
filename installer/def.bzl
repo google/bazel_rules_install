@@ -40,7 +40,6 @@ def _gen_install_binary_impl(ctx):
         substitutions = {
             "@@SOURCE_FILES@@": shell.array_literal(sources),
             "@@TARGET_NAMES@@": shell.array_literal(targets),
-            "@@COMPILATION_MODE@@": shell.quote(ctx.var["COMPILATION_MODE"]),
             "@@EXECUTABLE@@": shell.quote(repr(ctx.attr.executable)),
             "@@INSTALLER_LABEL@@": shell.quote("@{}//{}:{}".format(
                 ctx.workspace_name,
@@ -62,12 +61,24 @@ def _gen_install_binary_impl(ctx):
         runfiles = ctx.runfiles(files),
     )]
 
+def _compilation_mode_transition_impl(settings, attr):
+    mode = attr.compilation_mode or settings["//command_line_option:compilation_mode"]
+    return {"//command_line_option:compilation_mode": mode}
+
+_compilation_mode_transition = transition(
+    implementation = _compilation_mode_transition_impl,
+    inputs = ["//command_line_option:compilation_mode"],
+    outputs = ["//command_line_option:compilation_mode"],
+)
+
 _gen_installer = rule(
     implementation = _gen_install_binary_impl,
     attrs = {
+        "compilation_mode": attr.string(),
         "data": attr.label_list(
             mandatory = True,
             allow_files = True,
+            cfg = _compilation_mode_transition,
         ),
         "executable": attr.bool(default = True),
         "target_subdir": attr.string(default = ""),
@@ -75,6 +86,7 @@ _gen_installer = rule(
             allow_single_file = True,
             default = Label(_TEMPLATE_TARGET),
         ),
+        "_whitelist_function_transition": attr.label(default = "@bazel_tools//tools/whitelists/function_transition_whitelist"),
     },
     executable = True,
     outputs = {
@@ -82,7 +94,7 @@ _gen_installer = rule(
     },
 )
 
-def installer(name, data, executable = True, target_subdir = ""):
+def installer(name, data, compilation_mode = "opt", executable = True, target_subdir = ""):
     """Creates an installer
 
     This rule creates an installer for targets in data. Running the installer
@@ -91,14 +103,16 @@ def installer(name, data, executable = True, target_subdir = ""):
 
     Args:
       name: A unique name of this rule.
+      compilation_mode: If not empty, sets compilation_mode of targets in data.
       data: Targets to be installed. File names will not be changed.
-      executable: If True (default), the copied files will be set as executable.
+      executable: If True, the copied files will be set as executable.
       target_subdir: Optional subdir under the prefix where the files will be
                      placed.
     """
     installer_name = "_{}{}".format(name, _INSTALLER_GEN_SUFFIX)
     _gen_installer(
         name = installer_name,
+        compilation_mode = compilation_mode,
         data = data,
         executable = executable,
         target_subdir = target_subdir,

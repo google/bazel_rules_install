@@ -17,13 +17,10 @@
 #
 @@GENERATED_WARNING@@ ; exit 1
 #
-# 1.  To use this template, add installer() rule from install/installer.bzl
+# 1.  To use this template, add installer() rule from installer/def.bzl
 #     to your BUILD file.
 # 2.  To install the target under /usr/local/bin, run:
-#     bazel run //path/to/your:installer_target -c opt /usr/local/bin
-#
-#     If you don't want --compilation_mode=opt, run:
-#     bazel run //path/to/your:installer_target -- -g /usr/local/bin
+#     bazel run //path/to/your:installer_target -- /usr/local/bin
 #
 #     To use sudo, run:
 #     bazel run //path/to/your:installer_target -- -s /usr/local/bin
@@ -35,8 +32,6 @@ set -o pipefail -o errexit -o nounset
 declare -r -a SOURCE_FILES=@@SOURCE_FILES@@
 # Array of paths relative to prefix.
 declare -r -a TARGET_NAMES=@@TARGET_NAMES@@
-# Value for the -c or --compilation_mode bazel var.
-declare -r COMPILATION_MODE=@@COMPILATION_MODE@@
 # Set executable mode of files
 declare -r EXECUTABLE=@@EXECUTABLE@@
 # Fully specified bazel label of INSTALLER_LABEL installer() rule.
@@ -51,14 +46,13 @@ function error() {
 }
 
 function usage() {
-  echo >&2 "Usage: bazel run ${INSTALLER_LABEL} [-c opt] [--] [-g] [-s] [--] /INSTALL_PREFIX"
+  echo >&2 "Usage: bazel run ${INSTALLER_LABEL} [-c opt] [--] [-s] [--] /INSTALL_PREFIX"
 }
 
 # Checks that all template variables have been substituted.
 function verify_templates() {
   if [[ "${SOURCE_FILES[@]:0:2}" =~ ^@@ ]] ||
     [[ "${TARGET_NAMES[@]:0:2}" =~ ^@@ ]] ||
-    [[ "${COMPILATION_MODE:0:2}" =~ ^@@ ]] ||
     [[ "${INSTALLER_LABEL:0:2}" =~ ^@@ ]]; then
     error "template substitution failed"
   fi
@@ -109,16 +103,12 @@ function main() {
   local s_flag=''
   while getopts ':ghs' flag; do
     case "${flag}" in
-      g) g_flag='true' ;;  # Accept debug builds
+      g) g_flag='' ;;  # Ignored - debug builds flag
       s) s_flag='sudo' ;;  # Run with sudo
       h) usage; exit 0 ;;
       *) error "Unexpected option '-${OPTARG}'"   ;;
     esac
   done
-
-  if [[ "${g_flag}" != 'true' ]] && [[ "${COMPILATION_MODE}" != 'opt' ]]; then
-    error "run bazel with '-c opt' or add '-- -g' option to run installer ${g_flag}"
-  fi
 
   if [[ -z "${OPTIND:-}" ]] || (($OPTIND > $#)); then
     error "INSTALL_PREFIX wasn't specified"
