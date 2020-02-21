@@ -23,7 +23,7 @@ Think: `make install`. Someday: `bazel run install`.
 
 ## Rules
 
-* [installer](docs/external/com_github_google_rules_install/src/installer.md#installer)
+* [installer](docs/installer_rule.md#installer)
 
 ## Setup
 

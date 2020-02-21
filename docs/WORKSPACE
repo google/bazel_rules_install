@@ -22,33 +22,15 @@ local_repository(
 )
 
 git_repository(
-    name = "io_bazel_rules_sass",
-    commit = "cb5dc1434320f544920f78df0559b9a3f42ab67a",  # 1.16.1
-    remote = "https://github.com/bazelbuild/rules_sass.git",
-)
-
-git_repository(
-    name = "io_bazel_skydoc",
-    commit = "4ea7b8257d11ac33eef7e9daadbedbfe375d9236",  # 0.2.0
-    remote = "https://github.com/bazelbuild/skydoc.git",
+    name = "io_bazel_stardoc",
+    remote = "https://github.com/bazelbuild/stardoc.git",
+    commit = "4378e9b6bb2831de7143580594782f538f461180", # 0.4.0
 )
 
 load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies")
 
 install_rules_dependencies()
 
-load("@io_bazel_skydoc//:setup.bzl", "skydoc_repositories")
+load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
 
-skydoc_repositories()
-
-load("@io_bazel_rules_sass//:package.bzl", "rules_sass_dependencies")
-
-rules_sass_dependencies()
-
-load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories")
-
-node_repositories()
-
-load("@io_bazel_rules_sass//:defs.bzl", "sass_repositories")
-
-sass_repositories()
+stardoc_repositories()
