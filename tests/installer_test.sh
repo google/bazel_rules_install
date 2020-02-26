@@ -86,7 +86,7 @@ function verify_install() {
 function test_basic_install() {
   local tmpdir="$1"
 
-  if ! "${INSTALLER}" -g "${tmpdir}"; then
+  if ! "${INSTALLER}" "${tmpdir}"; then
     echo >&2 "installer didn't exit with code 0"
     return 1
   fi
@@ -104,7 +104,7 @@ function test_basic_install() {
 function test_prefix_install() {
   local tmpdir="$1"
 
-  if ! "${INSTALLER}" -g "${tmpdir}/a/b/c"; then
+  if ! "${INSTALLER}" "${tmpdir}/a/b/c"; then
     echo >&2 "installer didn't exit with code 0"
     return 1
   fi

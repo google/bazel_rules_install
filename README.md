@@ -68,7 +68,7 @@ Run the `installer` using `bazel run`. The following example installs `foo` in
 `~/bin`:
 
 ```shell
-bazel run //src/path/to/pkg:install_foo -c opt -- ~/bin
+bazel run //src/path/to/pkg:install_foo -- ~/bin
 ```
 
 ### sudo
@@ -79,8 +79,32 @@ If you need to use `sudo` to install a file in a system directory:
 * Instead pass flag `-s` to the installer.
 
 ```shell
-bazel run //src/path/to/pkg:install_foo -c opt -- -s /usr/local/bin
+bazel run //src/path/to/pkg:install_foo -- -s /usr/local/bin
 ```
+
+### Debug builds
+
+By default `installer` uses targets built with `-c opt`. To disable this
+override of a command line flag use `compilation_mode = ""` attribute:
+
+```python
+installer(
+    name = "install_foo",
+    compilation_mode = "",
+    data = [":foo"],
+)
+```
+
+Alternatively you can force a debug build:
+
+```python
+installer(
+    name = "install_foo_dbg",
+    compilation_mode = "dbg",
+    data = [":foo"],
+)
+```
+
 
 ## See also
 

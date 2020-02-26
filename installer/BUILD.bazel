@@ -32,9 +32,9 @@ bzl_library(
     srcs = [
         "def.bzl",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:shell",
     ],
-    visibility = ["//visibility:public"],
 )
