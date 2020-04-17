@@ -32,7 +32,7 @@ while (( "$#" >  2 )); do
       declare -r SUBDIR="${3#-subdir=}"
     ;;
     -executable=*)
-      # target_subdir attribute of installer rule
+      # executable attribute of installer rule
       declare -r EXECUTABLE="${3#-executable=}"
     ;;
     *)

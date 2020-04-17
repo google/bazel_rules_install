@@ -23,16 +23,30 @@ load("@bazel_skylib//lib:shell.bzl", "shell")
 _INSTALLER_GEN_SUFFIX = "_gen"
 _TEMPLATE_TARGET = "@com_github_google_rules_install//installer:installer_template"
 
+def _install_files_depset(default_info):
+    direct = []
+    transitive = []
+    if default_info.default_runfiles:
+        transitive = [default_info.default_runfiles.files]
+    if default_info.files_to_run and default_info.files_to_run.executable:
+        direct = [default_info.files_to_run.executable]
+    if direct or transitive:
+        return depset(direct = direct, transitive = transitive)
+    return None
+
 def _gen_install_binary_impl(ctx):
-    files = []
+    transitive_runfiles = []
     sources = []
     targets = []
-    for d in ctx.attr.data:
-        file = d[DefaultInfo].files_to_run.executable
-        files.append(file)
-        sources.append(file.short_path)
-        target = paths.join(ctx.attr.target_subdir, paths.basename(file.short_path))
-        targets.append(target)
+    for input in ctx.attr.data:
+        input_files = _install_files_depset(input[DefaultInfo])
+        if not input_files:
+            continue
+        transitive_runfiles.append(input_files)
+        for file in input_files.to_list():
+            sources.append(file.short_path)
+            target = paths.join(ctx.attr.target_subdir, paths.basename(file.short_path))
+            targets.append(target)
 
     ctx.actions.expand_template(
         output = ctx.outputs.out,
@@ -58,7 +72,10 @@ def _gen_install_binary_impl(ctx):
 
     return [DefaultInfo(
         executable = ctx.outputs.out,
-        runfiles = ctx.runfiles(files),
+        runfiles = ctx.runfiles(
+            files = [ctx.outputs.out],
+            transitive_files = depset(transitive = transitive_runfiles),
+        ),
     )]
 
 def _compilation_mode_transition_impl(settings, attr):
