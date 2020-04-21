@@ -130,3 +130,45 @@ sh_test(
         ":multifile_installer_under_test",
     ],
 )
+
+installer(
+    name = "filegroup_installer_under_test",
+    data = [":test_filegroup"],
+    executable = False,
+)
+
+filegroup(
+    name = "test_filegroup",
+    data = [
+        "testdata/data.txt",
+        "testdata/subdir/subdir_data.txt",
+    ],
+)
+
+sh_test(
+    name = "filegroup_installer_test_1",
+    srcs = ["installer_test.sh"],
+    args = [
+        "$(location :filegroup_installer_under_test)",
+        "$(location testdata/subdir/subdir_data.txt)",
+        "-executable=False",
+    ],
+    data = [
+        "testdata/subdir/subdir_data.txt",
+        ":filegroup_installer_under_test",
+    ],
+)
+
+sh_test(
+    name = "filegroup_installer_test_2",
+    srcs = ["installer_test.sh"],
+    args = [
+        "$(location :filegroup_installer_under_test)",
+        "$(location testdata/data.txt)",
+        "-executable=False",
+    ],
+    data = [
+        "testdata/data.txt",
+        ":filegroup_installer_under_test",
+    ],
+)
