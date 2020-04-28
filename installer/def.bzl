@@ -26,8 +26,10 @@ _TEMPLATE_TARGET = "@com_github_google_rules_install//installer:installer_templa
 def _install_files_depset(default_info):
     direct = []
     transitive = []
+    if default_info.files:
+        transitive.append(default_info.files)
     if default_info.default_runfiles:
-        transitive = [default_info.default_runfiles.files]
+        transitive.append(default_info.default_runfiles.files)
     if default_info.files_to_run and default_info.files_to_run.executable:
         direct = [default_info.files_to_run.executable]
     if direct or transitive:
