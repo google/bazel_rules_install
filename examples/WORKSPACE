@@ -28,7 +28,6 @@ install_rules_dependencies()
 git_repository(
     name = "com_github_bazelbuild_buildtools",
     branch = "master",
-    #commit = "6b4248f0c43c82a6f7c7ff109366e6a38c6ea811",  # 2019-01-30
     remote = "https://github.com/bazelbuild/buildtools.git",
 )
 
