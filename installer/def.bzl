@@ -46,7 +46,14 @@ def _gen_install_binary_impl(ctx):
             continue
         transitive_runfiles.append(input_files)
         for file in input_files.to_list():
-            sources.append(file.short_path)
+            workspace = (input.label.workspace_name or ctx.workspace_name)
+
+            file_path = file.path
+
+            if file_path.startswith("external/" + workspace + "/"):
+                file_path = file_path[10 + len(workspace):]
+
+            sources.append(workspace + "/" + file_path)
             target = paths.join(ctx.attr.target_subdir, paths.basename(file.short_path))
             targets.append(target)
 

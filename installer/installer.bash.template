@@ -27,6 +27,17 @@
 
 set -o pipefail -o errexit -o nounset
 
+# --- begin runfiles.bash initialization v2 ---
+# Copy-pasted from the Bazel Bash runfiles library v2.
+f=bazel_tools/tools/bash/runfiles/runfiles.bash
+source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null || \
+  source "$(grep -sm1 "^$f " "${RUNFILES_MANIFEST_FILE:-/dev/null}" | cut -f2- -d' ')" 2>/dev/null || \
+  source "$0.runfiles/$f" 2>/dev/null || \
+  source "$(grep -sm1 "^$f " "$0.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/null || \
+  source "$(grep -sm1 "^$f " "$0.exe.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/null || \
+  { echo>&2 "ERROR: cannot find $f"; exit 1; }; f=;
+# --- end runfiles.bash initialization v2 ---
+
 # Template variables:
 # Array of paths of files
 declare -r -a SOURCE_FILES=@@SOURCE_FILES@@
@@ -65,8 +76,8 @@ function verify_templates() {
 # Checks that each path in $SOURCE_FILES[@] is a readable file.
 function check_sources() {
   for source in "${SOURCE_FILES[@]}"; do
-    if ! [[ -r "${source}" ]]; then
-      error "Can't read '${source}'"
+    if ! [[ -r "$(rlocation ${source})" ]]; then
+      error "Can't read '${source}' located at '$(rlocation ${source})'"
     fi
   done
 }
@@ -76,7 +87,7 @@ function install_file() {
   local prefix="$1"
   local i="$2"
   local sudo="$3"
-  local source="${SOURCE_FILES[${i}]}"
+  local source="$(rlocation ${SOURCE_FILES[${i}]})"
   local target="${TARGET_NAMES[${i}]}"
   local target_dir
   target_dir="$(dirname -- "${prefix}/${target}")"
@@ -114,6 +125,12 @@ function main() {
     error "INSTALL_PREFIX wasn't specified"
   fi
   local prefix="${!OPTIND}"
+
+  # Convert Windows path to Unix path
+  if command -v cygpath &> /dev/null; then
+    prefix="$(cygpath $prefix)"
+  fi
+
   if [[ "${prefix:0:1}" != "/" ]]; then
     error "INSTALL_PREFIX must be an absolute path"
   fi

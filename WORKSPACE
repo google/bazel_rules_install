@@ -26,6 +26,11 @@ local_repository(
     path = "./docs",
 )
 
+local_repository(
+    name = "com_github_google_rules_install_test_workspace",
+    path = "./tests/test_workspace",
+)
+
 http_archive(
     name = "com_github_bazelbuild_buildtools",
     sha256 = "86f62b307c9b4f6f4df7c4b3b583a617f10d32a13af3f8d8c311e4f87010410e",
