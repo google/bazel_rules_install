@@ -172,3 +172,59 @@ sh_test(
         ":filegroup_installer_under_test",
     ],
 )
+
+installer(
+    name = "other_workspace_installer_under_test",
+    data = [
+        "@com_github_google_rules_install_test_workspace//:data_from_another_workspace.txt",
+    ],
+    executable = False,
+)
+
+sh_test(
+    name = "other_workspace_installer_test",
+    srcs = ["installer_test.sh"],
+    args = [
+        "$(location :other_workspace_installer_under_test)",
+        "$(location @com_github_google_rules_install_test_workspace//:data_from_another_workspace.txt)",
+        "-executable=False",
+    ],
+    data = [
+        ":other_workspace_installer_under_test",
+        "@com_github_google_rules_install_test_workspace//:data_from_another_workspace.txt",
+    ],
+)
+
+installer(
+    name = "filegroup_from_another_workspace_installer_under_test",
+    data = ["@com_github_google_rules_install_test_workspace//:test_filegroup"],
+    executable = False,
+)
+
+sh_test(
+    name = "filegroup_from_another_workspace_installer_test_1",
+    srcs = ["installer_test.sh"],
+    args = [
+        "$(location :filegroup_from_another_workspace_installer_under_test)",
+        "$(location @com_github_google_rules_install_test_workspace//:data_from_another_workspace.txt)",
+        "-executable=False",
+    ],
+    data = [
+        ":filegroup_from_another_workspace_installer_under_test",
+        "@com_github_google_rules_install_test_workspace//:data_from_another_workspace.txt",
+    ],
+)
+
+sh_test(
+    name = "filegroup_from_another_workspace_installer_test_2",
+    srcs = ["installer_test.sh"],
+    args = [
+        "$(location :filegroup_from_another_workspace_installer_under_test)",
+        "$(location @com_github_google_rules_install_test_workspace//:subdir/subdir_data.txt)",
+        "-executable=False",
+    ],
+    data = [
+        ":filegroup_from_another_workspace_installer_under_test",
+        "@com_github_google_rules_install_test_workspace//:subdir/subdir_data.txt",
+    ],
+)

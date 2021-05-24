@@ -3,12 +3,6 @@ language: minimal
 git:
   depth: 1
 
-install: scripts/install.sh
-script:
-  - scripts/run_tests.sh
-  - scripts/run_regen_docs.sh
-  - scripts/run_buildifier.sh
-
 matrix:
   include:
     - os: linux
@@ -16,6 +10,12 @@ matrix:
         - INSTALL_BAZEL=HEAD
         - RUN_TESTS=1
         - RUN_EXAMPLES=1
+      install: scripts/install.sh
+      script:
+        - scripts/run_tests.sh
+        - scripts/run_regen_docs.sh
+        - scripts/run_buildifier.sh
+
     - os: linux
       env:
         - INSTALL_BAZEL=RELEASE
@@ -23,3 +23,13 @@ matrix:
         - RUN_EXAMPLES=1
         - RUN_REGEN_DOCS=1
         - RUN_BUILDIFIER=1
+      install: scripts/install.sh
+      script:
+        - scripts/run_tests.sh
+        - scripts/run_regen_docs.sh
+        - scripts/run_buildifier.sh
+
+    - os: windows
+      install: choco install bazel
+      script:
+        - bazel test --show_progress_rate_limit=30.0 ...
