@@ -77,6 +77,32 @@ sh_test(
     ],
 )
 
+genrule(
+    name = "generate_test",
+    outs = ["generated_file.txt"],
+    cmd = "echo this is a test file > $@",
+)
+
+installer(
+    name = "generated_file_installer_under_test",
+    data = ["generated_file.txt"],
+    executable = False,
+)
+
+sh_test(
+    name = "generated_file_installer_test",
+    srcs = ["installer_test.sh"],
+    args = [
+        "$(location :generated_file_installer_under_test)",
+        "$(location generated_file.txt)",
+        "-executable=False",
+    ],
+    data = [
+        "generated_file.txt",
+        ":generated_file_installer_under_test",
+    ],
+)
+
 installer(
     name = "multifile_installer_under_test",
     data = [
