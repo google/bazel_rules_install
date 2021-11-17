@@ -19,11 +19,18 @@ exports_files([
     "subdir/subdir_data.txt",
 ])
 
+genrule(
+    name = "generated_file",
+    outs = ["generated_file.txt"],
+    cmd = "echo this is a test file > $@",
+)
+
 filegroup(
     name = "test_filegroup",
     data = [
         "data_from_another_workspace.txt",
         "subdir/subdir_data.txt",
+        ":generated_file",
     ],
     visibility = ["//visibility:public"],
 )

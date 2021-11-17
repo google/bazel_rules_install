@@ -51,6 +51,10 @@ def _gen_install_binary_impl(ctx):
 
         for file in input_files.to_list():
             file_path = file.path
+            root_path = file.root.path + "/"
+
+            if file_path.startswith(root_path):
+                file_path = file_path[len(root_path):]
 
             if file_path.startswith(external_prefix):
                 file_path = file_path[len(external_prefix):]
