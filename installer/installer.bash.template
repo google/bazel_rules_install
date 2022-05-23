@@ -103,7 +103,7 @@ function install_file() {
   [[ -d "${target_dir}" ]] || \
     $sudo mkdir --parents -- "${target_dir}"
 
-  $sudo install --mode="${target_mode}" \
+  $sudo install -m "${target_mode}" \
     -T -- "${source}" "${target_dir}/${target_name}"
 }
 
