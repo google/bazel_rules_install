@@ -33,28 +33,28 @@ local_repository(
 
 http_archive(
     name = "com_github_bazelbuild_buildtools",
-    sha256 = "86f62b307c9b4f6f4df7c4b3b583a617f10d32a13af3f8d8c311e4f87010410e",
-    strip_prefix = "buildtools-1.0.0",
+    sha256 = "e3bb0dc8b0274ea1aca75f1f8c0c835adbe589708ea89bf698069d0790701ea3",
+    strip_prefix = "buildtools-5.1.0",
     urls = [
-        "https://github.com/bazelbuild/buildtools/archive/1.0.0.tar.gz",
+        "https://github.com/bazelbuild/buildtools/archive/refs/tags/5.1.0.tar.gz",
     ],
 )
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "af04c969321e8f428f63ceb73463d6ea817992698974abeff0161e069cd08bd6",
+    sha256 = "099a9fb96a376ccbbb7d291ed4ecbdfd42f6bc822ab77ae6f1b5cb9e914e94fa",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.21.3/rules_go-v0.21.3.tar.gz",
-        "https://github.com/bazelbuild/rules_go/releases/download/v0.21.3/rules_go-v0.21.3.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
+        "https://github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
     ],
 )
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "a79d19dcdf9139fa4b81206e318e33d245c4c9da1ffed21c87288ed4380426f9",
-    strip_prefix = "protobuf-3.11.4",
+    sha256 = "3bd7828aa5af4b13b99c191e8b1e884ebfa9ad371b0ce264605d347f135d2568",
+    strip_prefix = "protobuf-3.19.4",
     urls = [
-        "https://github.com/protocolbuffers/protobuf/archive/v3.11.4.tar.gz",
+        "https://github.com/protocolbuffers/protobuf/archive/v3.19.4.tar.gz",
     ],
 )
 
@@ -70,7 +70,7 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 
 go_rules_dependencies()
 
-go_register_toolchains()
+go_register_toolchains(version = "1.19.2")
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 

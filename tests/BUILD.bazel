@@ -24,6 +24,7 @@ installer(
 
 sh_test(
     name = "installer_test",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :installer_under_test)",
@@ -43,6 +44,7 @@ installer(
 
 sh_test(
     name = "executable_installer_test",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :executable_installer_under_test)",
@@ -64,6 +66,7 @@ installer(
 
 sh_test(
     name = "subdir_installer_test",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :subdir_installer_under_test)",
@@ -91,6 +94,7 @@ installer(
 
 sh_test(
     name = "generated_file_installer_test",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :generated_file_installer_under_test)",
@@ -116,6 +120,7 @@ installer(
 # Test each result separately
 sh_test(
     name = "multifile_installer_test_1",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :multifile_installer_under_test)",
@@ -130,6 +135,7 @@ sh_test(
 
 sh_test(
     name = "multifile_installer_test_2",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :multifile_installer_under_test)",
@@ -145,6 +151,7 @@ sh_test(
 
 sh_test(
     name = "multifile_installer_test_3",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :multifile_installer_under_test)",
@@ -173,6 +180,7 @@ filegroup(
 
 sh_test(
     name = "filegroup_installer_test_1",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :filegroup_installer_under_test)",
@@ -187,6 +195,7 @@ sh_test(
 
 sh_test(
     name = "filegroup_installer_test_2",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :filegroup_installer_under_test)",
@@ -209,6 +218,7 @@ installer(
 
 sh_test(
     name = "other_workspace_installer_test",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :other_workspace_installer_under_test)",
@@ -229,6 +239,7 @@ installer(
 
 sh_test(
     name = "filegroup_from_another_workspace_installer_test_1",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :filegroup_from_another_workspace_installer_under_test)",
@@ -243,6 +254,7 @@ sh_test(
 
 sh_test(
     name = "filegroup_from_another_workspace_installer_test_2",
+    timeout = "short",
     srcs = ["installer_test.sh"],
     args = [
         "$(location :filegroup_from_another_workspace_installer_under_test)",
