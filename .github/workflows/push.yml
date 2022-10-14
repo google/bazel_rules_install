@@ -1,0 +1,30 @@
+name: push
+
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Bazel cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+          key: ${{ runner.os }}-bazel-cache
+
+      - name: Bazel on Linux
+        run: |
+          set -x -e
+          bash -x -e scripts/run_buildifier.sh
+          bash -x -e scripts/run_tests.sh
+          bash -x -e scripts/run_examples.sh
+          bash -x -e scripts/run_regen_docs.sh
