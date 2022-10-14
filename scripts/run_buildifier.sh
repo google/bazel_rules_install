@@ -14,25 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eu
+set -o errexit -o nounset -o xtrace
 
-# -------------------------------------------------------------------------
-# Asked to do a buildifier run.
-if [[ -z "${RUN_BUILDIFIER:-}" ]]; then
-  echo >&2 'Skipping buildifier'
-else
-  if ! diff -u <(git status --porcelain=v2) /dev/null; then
-    echo >&2 'Repository is not in a clean state'
-    exit 1
-  fi
+if ! diff -u <(git status --porcelain=v2) /dev/null; then
+  echo >&2 'Repository is not in a clean state'
+  exit 1
+fi
 
-  if ! bazel run  --show_progress_rate_limit=30.0 :buildifier -- --mode=check; then
-    echo >&2 'Run `bazel run :buildifier`'
-    exit 1
-  fi
+if ! bazel run  --show_progress_rate_limit=30.0 :buildifier -- --mode=check; then
+  echo >&2 'Run `bazel run :buildifier`'
+  exit 1
+fi
 
-  if ! diff -u <(git status --porcelain=v2) /dev/null; then
-    echo >&2 'You need to `bazel run //:buildifier`'
-    exit 1
-  fi
+if ! diff -u <(git status --porcelain=v2) /dev/null; then
+  echo >&2 'You need to `bazel run //:buildifier`'
+  exit 1
 fi

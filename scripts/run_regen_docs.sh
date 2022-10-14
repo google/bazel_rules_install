@@ -14,22 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eu
+set -o errexit -o nounset -o xtrace
 
-# -------------------------------------------------------------------------
-# Asked to do a docs build.
-if [[ -z "${RUN_REGEN_DOCS:-}" ]]; then
-  echo >&2 "Skipping docs regen"
-else
-  if ! diff -u <(git status --porcelain=v2) /dev/null; then
-    echo >&2 "Repository is not in a clean state"
-    exit 1
-  fi
+if ! diff -u <(git status --porcelain=v2) /dev/null; then
+  echo >&2 "Repository is not in a clean state"
+  exit 1
+fi
 
-  ./docs/regen.sh
+./docs/regen.sh
 
-  if ! diff -u <(git status --porcelain=v2) /dev/null; then
-    echo >&2 "The documentation is out of date. Run ./docs/regen.sh"
-    exit 1
-  fi
+if ! diff -u <(git status --porcelain=v2) /dev/null; then
+  echo >&2 "The documentation is out of date. Run ./docs/regen.sh"
+  exit 1
 fi

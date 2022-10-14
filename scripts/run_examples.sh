@@ -14,11 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eu
+set -o errexit -o nounset -o xtrace
 
-# -------------------------------------------------------------------------
-if [[ -z "${RUN_EXAMPLES:-}" ]]; then
-  echo >&2 "Skipping examples"
-else
-  ./examples/run_all.sh
-fi
+./examples/run_all.sh
