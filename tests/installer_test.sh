@@ -35,6 +35,15 @@ case "$(uname -s)" in
     ;;
 esac
 
+case "$(uname -s)" in
+  Darwin)
+    ON_DARWIN=1
+    ;;
+  *)
+    ON_DARWIN=0
+    ;;
+esac
+
 function error() {
   echo >&2 "installer_test.sh: $@"
   exit 1
@@ -71,7 +80,12 @@ function setup() {
     error "Can't read ${FILE}"
   [[ -x "${INSTALLER}" ]] ||
     error "Can't run ${INSTALLER}"
-  mktemp --directory --tmpdir="${TEST_TMPDIR}"
+  
+  if [[ "${ON_DARWIN}" -eq 0 ]]; then
+    mktemp --directory --tmpdir="${TEST_TMPDIR}"
+  else
+    mktemp -d
+  fi
 }
 
 function verify_install() {
@@ -83,7 +97,11 @@ function verify_install() {
   fi
 
   local mode
-  mode="$(stat --dereference --format=%a "${expected_path}")"
+  if [[ "${ON_DARWIN}" -eq 0 ]]; then
+    mode="$(stat --dereference --format=%a "${expected_path}")"
+  else
+    mode="$(stat -L -f %A "${expected_path}")"
+  fi
   local expected_mode
   if [[ "${EXECUTABLE}" = "True" ]]; then
     expected_mode="755"
