@@ -18,15 +18,16 @@ set -eu
 
 cd "$(dirname "$0")"
 
-if ! [[ -z "${RUNNER_TEMP:-}" ]]; then
-  declare -r tmpdir="$RUNNER_TEMP"
+if [[ "${CI:-false}" = "true" ]]; then
+  declare -r installdir="${GITHUB_WORKSPACE}/testinstall"
+  mkdir -p "${installdir}"
 else
-  declare -r tmpdir="$(mktemp -d)"
+  declare -r installdir="$(mktemp -d)"
 fi
 
-ls -alh "${tmpdir}"
+ls -alh "${installdir}"
 
-bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier "${tmpdir}"
-"${tmpdir}/buildifier" --version
+bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier "${installdir}"
+"${installdir}/buildifier" --version
 
-rm -rf "${tmpdir}"
+rm -rf "${installdir}"
