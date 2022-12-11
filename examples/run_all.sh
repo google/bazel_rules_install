@@ -24,6 +24,8 @@ else
   declare -r tmpdir="$(mktemp -d)"
 fi
 
+ls -alh "${tmpdir}"
+
 bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier "${tmpdir}"
 "${tmpdir}/buildifier" --version
 
