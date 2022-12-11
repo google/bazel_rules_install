@@ -18,7 +18,11 @@ set -eu
 
 cd "$(dirname "$0")"
 
-declare -r tmpdir="$(mktemp -d)"
+if ! [[ -z "${RUNNER_TEMP:-}" ]]; then
+  declare -r tmpdir="$RUNNER_TEMP"
+else
+  declare -r tmpdir="$(mktemp -d)"
+fi
 
 bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier "${tmpdir}"
 "${tmpdir}/buildifier" --version
