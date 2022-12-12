@@ -27,7 +27,7 @@ fi
 
 ls -alh "${installdir}"
 
-bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier "${installdir}"
+bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier -- "${installdir}"
 "${installdir}/buildifier" --version
 
 rm -rf "${installdir}"
