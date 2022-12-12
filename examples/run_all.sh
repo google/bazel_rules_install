@@ -14,13 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eu
+set -xeu
 
 cd "$(dirname "$0")"
 
-declare -r tmpdir="$(mktemp -d)"
+if [[ "${CI:-false}" = "true" ]]; then
+  declare -r installdir="${GITHUB_WORKSPACE}/testinstall"
+  mkdir -p "${installdir}"
+else
+  declare -r installdir="$(mktemp -d)"
+fi
 
-bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier "${tmpdir}"
-"${tmpdir}/buildifier" --version
+ls -alh "${installdir}"
 
-rm -rf "${tmpdir}"
+bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier -- "${installdir}"
+"${installdir}/buildifier" --version
+
+rm -rf "${installdir}"

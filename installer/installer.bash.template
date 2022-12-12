@@ -82,6 +82,13 @@ function check_sources() {
   done
 }
 
+function beginswith() {
+  case $2 in
+    "$1"*) true;;
+    *) false;;
+  esac
+}
+
 # Installs $i-th file in $prefix.
 function install_file() {
   local prefix="$1"
@@ -101,10 +108,16 @@ function install_file() {
   fi
 
   [[ -d "${target_dir}" ]] || \
-    $sudo mkdir --parents -- "${target_dir}"
+    $sudo mkdir -p "${target_dir}"
 
-  $sudo install -m "${target_mode}" \
-    -T -- "${source}" "${target_dir}/${target_name}"
+  if [[ "$(uname -s)" = "Darwin" ]]; then
+    # Darwin doesn't support `-T` or `--`.
+    $sudo install -m "${target_mode}" \
+      "${source}" "${target_dir}/${target_name}"
+  else
+    $sudo install -m "${target_mode}" \
+      -T -- "${source}" "${target_dir}/${target_name}"
+  fi
 }
 
 function main() {
