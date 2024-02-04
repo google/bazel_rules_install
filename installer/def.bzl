@@ -118,7 +118,9 @@ _gen_installer = rule(
             allow_single_file = True,
             default = Label(_TEMPLATE_TARGET),
         ),
-        "_whitelist_function_transition": attr.label(default = "@bazel_tools//tools/whitelists/function_transition_whitelist"),
+        "_allowlist_function_transition": attr.label(
+            default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
+        ),
     },
     executable = True,
     outputs = {
