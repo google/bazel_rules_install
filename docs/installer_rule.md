@@ -1,6 +1,10 @@
 <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 
-<a name="#installer"></a>
+Installer Rules
+
+Skylark rules for installing files using Bazel.
+
+<a id="installer"></a>
 
 ## installer
 
@@ -19,11 +23,11 @@ argument to the installer.
 
 
 | Name  | Description | Default Value |
-| :-------------: | :-------------: | :-------------: |
-| name |  A unique name of this rule.   |  none |
-| data |  Targets to be installed. File names will not be changed.   |  none |
-| compilation_mode |  If not empty, sets compilation_mode of targets in data.   |  <code>"opt"</code> |
-| executable |  If True, the copied files will be set as executable.   |  <code>True</code> |
-| target_subdir |  Optional subdir under the prefix where the files will be                placed.   |  <code>""</code> |
+| :------------- | :------------- | :------------- |
+| <a id="installer-name"></a>name |  A unique name of this rule.   |  none |
+| <a id="installer-data"></a>data |  Targets to be installed. File names will not be changed.   |  none |
+| <a id="installer-compilation_mode"></a>compilation_mode |  If not empty, sets compilation_mode of targets in data.   |  `"opt"` |
+| <a id="installer-executable"></a>executable |  If True, the copied files will be set as executable.   |  `True` |
+| <a id="installer-target_subdir"></a>target_subdir |  Optional subdir under the prefix where the files will be placed.   |  `""` |
 
 
