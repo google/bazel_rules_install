@@ -1,4 +1,4 @@
-# Copyright 2018 The Bazel Authors.
+# Copyright 2024 The Bazel Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,29 +12,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-workspace(name = "com_github_google_rules_install")
+module(name = "com_github_google_rules_install")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+bazel_dep(name = "bazel_skylib", version = "1.3.0")
 
-local_repository(
+bazel_dep(
     name = "com_github_google_rules_install_examples",
+    dev_dependency = True,
+)
+local_path_override(
+    module_name = "com_github_google_rules_install_examples",
     path = "./examples",
 )
 
-local_repository(
+bazel_dep(
     name = "com_github_google_rules_install_docs",
+    dev_dependency = True,
+)
+local_path_override(
+    module_name = "com_github_google_rules_install_docs",
     path = "./docs",
 )
 
-local_repository(
+bazel_dep(
     name = "com_github_google_rules_install_test_workspace",
+    dev_dependency = True,
+)
+local_path_override(
+    module_name = "com_github_google_rules_install_test_workspace",
     path = "./tests/test_workspace",
 )
-
-load("@com_github_google_rules_install//:deps.bzl", "install_rules_dependencies")
-
-install_rules_dependencies()
-
-load("@com_github_google_rules_install//:setup.bzl", "install_rules_setup")
-
-install_rules_setup()

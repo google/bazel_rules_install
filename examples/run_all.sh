@@ -20,7 +20,7 @@ cd "$(dirname "$0")"
 
 declare -r tmpdir="$(mktemp -d)"
 
-bazel run  --show_progress_rate_limit=30.0 -c opt :install_buildifier "${tmpdir}"
-"${tmpdir}/buildifier" --version
+bazel run --show_progress_rate_limit=30.0 -c opt :install_hello_world "${tmpdir}"
+"${tmpdir}/hello_world"
 
 rm -rf "${tmpdir}"

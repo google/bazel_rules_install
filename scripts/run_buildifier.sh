@@ -21,12 +21,12 @@ if ! diff -u <(git status --porcelain=v2) /dev/null; then
   exit 1
 fi
 
-if ! bazel run  --show_progress_rate_limit=30.0 :buildifier -- --mode=check; then
-  echo >&2 'Run `bazel run :buildifier`'
+if ! buildifier --mode=check -r .; then
+  echo >&2 'Run `buildifier --mode=fix -r .`'
   exit 1
 fi
 
 if ! diff -u <(git status --porcelain=v2) /dev/null; then
-  echo >&2 'You need to `bazel run //:buildifier`'
+  echo >&2 'You need to `buildifier --mode=fix -r .`'
   exit 1
 fi

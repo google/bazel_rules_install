@@ -1,4 +1,4 @@
-# Copyright 2018 The Bazel Authors.
+# Copyright 2024 The Bazel Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@com_github_google_rules_install//installer:def.bzl", "installer")
+module(name = "com_github_google_rules_install_examples")
 
-licenses(["notice"])  # Apache 2.0
-
-cc_binary(
-    name = "hello_world",
-    srcs = ["hello_world.c"],
-)
-
-installer(
-    name = "install_hello_world",
-    data = [":hello_world"],
+bazel_dep(name = "com_github_google_rules_install")
+local_path_override(
+    module_name = "com_github_google_rules_install",
+    path = "..",
 )
